@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwipeStation - Discover New Products</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        
+        .logo-icon {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 24px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: #a0a0c0;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 150px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff4b2b;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a0a0c0;
+            margin-top: 5px;
+        }
+        
+        .main-content {
+            display: flex;
+            width: 100%;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+        
+        .card-container {
+            flex: 1;
+            min-width: 350px;
+            max-width: 450px;
+            perspective: 1000px;
+            height: 550px;
+        }
+        
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            cursor: grab;
+        }
+        
+        .card:active {
+            cursor: grabbing;
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .card-front {
+            background-color: #2d3047;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-back {
+            background-color: #1a1a2e;
+            transform: rotateY(180deg);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .product-image {
+            height: 65%;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .product-info {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .product-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        
+        .product-description {
+            color: #b0b0d0;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .product-price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff4b2b;
+        }
+        
+        .product-rating {
+            color: #ffc107;
+            margin: 10px 0;
+            font-size: 1.2rem;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-nope {
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            color: #ff4b2b;
+            border: 2px solid #ff4b2b;
+        }
+        
+        .btn-info {
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            color: #4a9eff;
+            border: 2px solid #4a9eff;
+        }
+        
+        .btn-like {
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+        
+        .btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 800px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .instructions h2 {
+            color: #ff4b2b;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .instructions-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 15px;
+        }
+        
+        .instruction-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .instruction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 75, 43, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff4b2b;
+        }
+        
+        .flip-notice {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #ffc107;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .swipe-indicator {
+            position: absolute;
+            top: 50%;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+        
+        .swipe-left {
+            left: 20px;
+            background-color: rgba(255, 75, 43, 0.8);
+            transform: translateY(-50%);
+        }
+        
+        .swipe-right {
+            right: 20px;
+            background-color: rgba(76, 175, 80, 0.8);
+            transform: translateY(-50%);
+        }
+        
+        .action-history {
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .action-history h2 {
+            color: #4a9eff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .history-list {
+            list-style-type: none;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .history-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .history-nope {
+            background-color: rgba(255, 75, 43, 0.2);
+            color: #ff4b2b;
+        }
+        
+        .history-like {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+        
+        .history-info {
+            background-color: rgba(74, 158, 255, 0.2);
+            color: #4a9eff;
+        }
+        
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #a0a0c0;
+            padding: 20px;
+            width: 100%;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .card-container, .action-history {
+                max-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .stats {
+                gap: 15px;
+            }
+            
+            .stat-box {
+                min-width: 120px;
+                padding: 12px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-swipe"></i>
+                </div>
+                <h1>SwipeStation</h1>
+            </div>
+            <p class="tagline">Discover amazing products with a simple swipe</p>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="total-swipes">0</div>
+                    <div class="stat-label">Total Swipes</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="likes-count">0</div>
+                    <div class="stat-label">Products Liked</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="nopes-count">0</div>
+                    <div class="stat-label">Products Passed</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="card-container">
+                <div class="card" id="product-card">
+                    <div class="flip-notice">
+                        <i class="fas fa-sync-alt"></i> Click for details
+                    </div>
+                    <div class="swipe-indicator swipe-left">NOPE</div>
+                    <div class="swipe-indicator swipe-right">LIKE</div>
+                    
+                    <div class="card-front">
+                        <div class="product-image" id="product-image"></div>
+                        <div class="product-info">
+                            <h2 class="product-title" id="product-title">Product Name</h2>
+                            <p class="product-description" id="product-description">Product description goes here. This is a brief description of what the product is about and why it's awesome.</p>
+                            <div class="product-rating" id="product-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <div class="product-price" id="product-price">$99.99</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-back">
+                        <h2>Product Details</h2>
+                        <p id="product-details">Detailed information about the product will appear here. This includes specifications, features, and other important details that users might want to know before making a decision.</p>
+                        <div class="product-specs" id="product-specs">
+                            <p><strong>Category:</strong> <span id="spec-category">Electronics</span></p>
+                            <p><strong>Brand:</strong> <span id="spec-brand">TechBrand</span></p>
+                            <p><strong>Warranty:</strong> <span id="spec-warranty">2 years</span></p>
+                            <p><strong>In Stock:</strong> <span id="spec-stock">Yes</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn btn-nope" id="btn-nope">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button class="btn btn-info" id="btn-info">
+                        <i class="fas fa-info"></i>
+                    </button>
+                    <button class="btn btn-like" id="btn-like">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="action-history">
+                <h2>Your Swipe History</h2>
+                <ul class="history-list" id="history-list">
+                    <!-- History items will be added here by JavaScript -->
+                </ul>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h2>How to Use SwipeStation</h2>
+            <div class="instructions-list">
+                <div class="instruction-item">
+                    <div class="instruction-icon">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                    <span>Swipe left or click <strong>X</strong> to pass on a product</span>
+                </div>
+                <div class="instruction-item">
+                    <div class="instruction-icon">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <span>Swipe right or click <strong>❤️</strong> to like a product</span>
+                </div>
+                <div class="instruction-item">
+                    <div class="instruction-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <span>Click the <strong>info</strong> button or card to flip for details</span>
+                </div>
+                <div class="instruction-item">
+                    <div class="instruction-icon">
+                        <i class="fas fa-mouse-pointer"></i>
+                    </div>
+                    <span>On desktop, you can also drag the card with your mouse</span>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>SwipeStation &copy; 2023 - Discover products with a swipe | This is a static HTML demonstration</p>
+        </footer>
+    </div>
+
+    <script>
+        // Product data
+        const products = [
+            {
+                id: 1,
+                name: "Wireless Noise-Cancelling Headphones",
+                description: "Premium over-ear headphones with active noise cancellation and 30-hour battery life.",
+                price: "$249.99",
+                rating: 4.5,
+                image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                details: "These premium headphones feature advanced noise cancellation technology, crystal-clear call quality, and comfortable memory foam ear cushions. Perfect for travel, work, or relaxation.",
+                category: "Electronics",
+                brand: "SoundMax",
+                warranty: "2 years",
+                stock: "Yes"
+            },
+            {
+                id: 2,
+                name: "Smart Fitness Watch",
+                description: "Track your workouts, heart rate, sleep, and receive smartphone notifications.",
+                price: "$199.99",
+                rating: 4.2,
+                image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                details: "Stay connected and monitor your health with this advanced smartwatch. Features GPS tracking, water resistance up to 50m, and compatibility with both iOS and Android.",
+                category: "Wearables",
+                brand: "FitTech",
+                warranty: "1 year",
+                stock: "Yes"
+            },
+            {
+                id: 3,
+                name: "Portable Bluetooth Speaker",
+                description: "Waterproof speaker with 360° sound, perfect for outdoor adventures.",
+                price: "$89.99",
+                rating: 4.7,
+                image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                details: "Take your music anywhere with this rugged, waterproof Bluetooth speaker. It delivers impressive 360-degree sound and has a battery life of up to 15 hours.",
+                category: "Audio",
+                brand: "BoomSound",
+                warranty: "18 months",
+                stock: "Limited"
+            },
+            {
+                id: 4,
+                name: "Ultra HD Action Camera",
+                description: "Capture your adventures in stunning 4K video with image stabilization.",
+                price: "$349.99",
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                details: "Designed for adventurers, this action camera shoots stunning 4K video at 60fps with advanced electronic image stabilization. It's waterproof up to 10m without a case.",
+                category: "Camera",
+                brand: "ActionPro",
+                warranty: "1 year",
+                stock: "Yes"
+            },
+            {
+                id: 5,
+                name: "Ergonomic Office Chair",
+                description: "Comfortable chair with lumbar support and adjustable height for long work sessions.",
+                price: "$299.99",
+                rating: 4.3,
+                image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                details: "Work in comfort with this ergonomic office chair featuring adjustable lumbar support, breathable mesh back, and adjustable armrests. Perfect for home or office use.",
+                category: "Furniture",
+                brand: "ComfortWorks",
+                warranty: "5 years",
+                stock: "Yes"
+            }
+        ];
+        
+        // State variables
+        let currentProductIndex = 0;
+        let totalSwipes = 0;
+        let likesCount = 0;
+        let nopesCount = 0;
+        let isDragging = false;
+        let startX = 0;
+        let currentX = 0;
+        let isFlipped = false;
+        
+        // DOM Elements
+        const card = document.getElementById('product-card');
+        const productImage = document.getElementById('product-image');
+        const productTitle = document.getElementById('product-title');
+        const productDescription = document.getElementById('product-description');
+        const productPrice = document.getElementById('product-price');
+        const productRating = document.getElementById('product-rating');
+        const productDetails = document.getElementById('product-details');
+        const specCategory = document.getElementById('spec-category');
+        const specBrand = document.getElementById('spec-brand');
+        const specWarranty = document.getElementById('spec-warranty');
+        const specStock = document.getElementById('spec-stock');
+        
+        const btnNope = document.getElementById('btn-nope');
+        const btnInfo = document.getElementById('btn-info');
+        const btnLike = document.getElementById('btn-like');
+        
+        const totalSwipesEl = document.getElementById('total-swipes');
+        const likesCountEl = document.getElementById('likes-count');
+        const nopesCountEl = document.getElementById('nopes-count');
+        const historyList = document.getElementById('history-list');
+        
+        const swipeLeftIndicator = document.querySelector('.swipe-left');
+        const swipeRightIndicator = document.querySelector('.swipe-right');
+        
+        // Initialize with first product
+        function loadProduct(index) {
+            const product = products[index];
+            
+            productImage.style.backgroundImage = `url('${product.image}')`;
+            productTitle.textContent = product.name;
+            productDescription.textContent = product.description;
+            productPrice.textContent = product.price;
+            productDetails.textContent = product.details;
+            specCategory.textContent = product.category;
+            specBrand.textContent = product.brand;
+            specWarranty.textContent = product.warranty;
+            specStock.textContent = product.stock;
+            
+            // Update rating stars
+            let starsHTML = '';
+            const fullStars = Math.floor(product.rating);
+            const hasHalfStar = product.rating % 1 !== 0;
+            
+            for (let i = 0; i < fullStars; i++) {
+                starsHTML += '<i class="fas fa-star"></i>';
+            }
+            
+            if (hasHalfStar) {
+                starsHTML += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const emptyStars = 5 - Math.ceil(product.rating);
+            for (let i = 0; i < emptyStars; i++) {
+                starsHTML += '<i class="far fa-star"></i>';
+            }
+            
+            productRating.innerHTML = starsHTML;
+            
+            // Reset card position and rotation
+            card.style.transform = 'translateX(0) rotate(0deg)';
+            card.style.transition = 'transform 0.5s';
+            
+            // Reset flip state
+            isFlipped = false;
+            setTimeout(() => {
+                card.style.transform = 'rotateY(0deg)';
+            }, 10);
+        }
+        
+        // Update counters
+        function updateCounters() {
+            totalSwipesEl.textContent = totalSwipes;
+            likesCountEl.textContent = likesCount;
+            nopesCountEl.textContent = nopesCount;
+        }
+        
+        // Add item to history
+        function addToHistory(action, productName) {
+            const historyItem = document.createElement('li');
+            historyItem.className = 'history-item';
+            
+            let iconClass, icon, text;
+            
+            if (action === 'like') {
+                iconClass = 'history-like';
+                icon = 'fas fa-heart';
+                text = `Liked "${productName}"`;
+            } else if (action === 'nope') {
+                iconClass = 'history-nope';
+                icon = 'fas fa-times';
+                text = `Passed on "${productName}"`;
+            } else {
+                iconClass = 'history-info';
+                icon = 'fas fa-info';
+                text = `Viewed details of "${productName}"`;
+            }
+            
+            historyItem.innerHTML = `
+                <div class="history-icon ${iconClass}">
+                    <i class="${icon}"></i>
+                </div>
+                <span>${text}</span>
+            `;
+            
+            // Add to beginning of list
+            historyList.insertBefore(historyItem, historyList.firstChild);
+            
+            // Limit history to 10 items
+            if (historyList.children.length > 10) {
+                historyList.removeChild(historyList.lastChild);
+            }
+        }
+        
+        // Handle swipe actions
+        function swipeLike() {
+            totalSwipes++;
+            likesCount++;
+            updateCounters();
+            addToHistory('like', products[currentProductIndex].name);
+            
+            // Show swipe indicator
+            swipeRightIndicator.style.opacity = '1';
+            setTimeout(() => {
+                swipeRightIndicator.style.opacity = '0';
+            }, 500);
+            
+            // Move to next product
+            moveToNextProduct();
+        }
+        
+        function swipeNope() {
+            totalSwipes++;
+            nopesCount++;
+            updateCounters();
+            addToHistory('nope', products[currentProductIndex].name);
+            
+            // Show swipe indicator
+            swipeLeftIndicator.style.opacity = '1';
+            setTimeout(() => {
+                swipeLeftIndicator.style.opacity = '0';
+            }, 500);
+            
+            // Move to next product
+            moveToNextProduct();
+        }
+        
+        function showDetails() {
+            addToHistory('info', products[currentProductIndex].name);
+            
+            // Flip card
+            isFlipped = !isFlipped;
+            if (isFlipped) {
+                card.style.transform = 'rotateY(180deg)';
+            } else {
+                card.style.transform = 'rotateY(0deg)';
+            }
+        }
+        
+        // Move to next product
+        function moveToNextProduct() {
+            currentProductIndex = (currentProductIndex + 1) % products.length;
+            loadProduct(currentProductIndex);
+        }
+        
+        // Handle mouse/touch events for dragging
+        function startDrag(e) {
+            isDragging = true;
+            card.style.transition = 'none';
+            
+            // Get initial position
+            if (e.type.includes('mouse')) {
+                startX = e.clientX;
+            } else {
+                startX = e.touches[0].clientX;
+            }
+            
+            currentX = startX;
+        }
+        
+        function duringDrag(e) {
+            if (!isDragging) return;
+            
+            let clientX;
+            if (e.type.includes('mouse')) {
+                clientX = e.clientX;
+            } else {
+                clientX = e.touches[0].clientX;
+            }
+            
+            const deltaX = clientX - currentX;
+            currentX = clientX;
+            
+            // Calculate rotation based on drag distance
+            const rotation = (clientX - startX) * 0.1;
+            
+            // Apply transform
+            card.style.transform = `translateX(${clientX - startX}px) rotate(${rotation}deg)`;
+            
+            // Show swipe indicators based on direction
+            if (clientX - startX > 50) {
+                swipeRightIndicator.style.opacity = '0.8';
+                swipeLeftIndicator.style.opacity = '0';
+            } else if (clientX - startX < -50) {
+                swipeLeftIndicator.style.opacity = '0.8';
+                swipeRightIndicator.style.opacity = '0';
+            } else {
+                swipeLeftIndicator.style.opacity = '0';
+                swipeRightIndicator.style.opacity = '0';
+            }
+        }
+        
+        function endDrag(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            card.style.transition = 'transform 0.5s';
+            
+            let clientX;
+            if (e.type.includes('mouse')) {
+                clientX = e.clientX;
+            } else {
+                clientX = e.changedTouches[0].clientX;
+            }
+            
+            const dragDistance = clientX - startX;
+            
+            // If dragged enough, trigger swipe action
+            if (dragDistance > 100) {
+                swipeLike();
+            } else if (dragDistance < -100) {
+                swipeNope();
+            } else {
+                // Return to center
+                card.style.transform = 'translateX(0) rotate(0deg)';
+                swipeLeftIndicator.style.opacity = '0';
+                swipeRightIndicator.style.opacity = '0';
+            }
+        }
+        
+        // Event Listeners
+        btnNope.addEventListener('click', swipeNope);
+        btnLike.addEventListener('click', swipeLike);
+        btnInfo.addEventListener('click', showDetails);
+        card.addEventListener('click', function(e) {
+            // Only flip on card click if not dragging
+            if (!isDragging) {
+                showDetails();
+            }
+        });
+        
+        // Mouse events for desktop
+        card.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', duringDrag);
+        document.addEventListener('mouseup', endDrag);
+        
+        // Touch events for mobile
+        card.addEventListener('touchstart', startDrag);
+        document.addEventListener('touchmove', duringDrag);
+        document.addEventListener('touchend', endDrag);
+        
+        // Prevent dragging images
+        card.addEventListener('dragstart', (e) => e.preventDefault());
+        
+        // Initialize
+        loadProduct(currentProductIndex);
+        updateCounters();
+        
+        // Add some initial history items
+        setTimeout(() => {
+            addToHistory('like', 'Wireless Earbuds');
+            addToHistory('nope', 'Gaming Keyboard');
+            addToHistory('info', 'Smartphone Case');
+        }, 1000);
+    </script>
+</body>
+</html>
